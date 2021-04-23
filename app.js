@@ -2,10 +2,7 @@ let form = document.getElementById('registrar');
 let input = form.querySelector('input');
 let ul = document.getElementById('invitedList');
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault(); //This prevents the page from reloading when the submit button is clicked
-  let text = input.value;//This is the value of the input box in the form.
-  input.value = '';//This resets the input field to a blank string to let the person know the submit btn has been clicked.
+function createLI(text) {
   let li = document.createElement('li');//Creates a list item
   li.textContent = text;//Sets the li text to the value of the input box.
   let label = document.createElement('label');//Creates a label for the confirmed checkbox.
@@ -19,6 +16,14 @@ form.addEventListener('submit', (e) => {
   button.textContent = 'remove';//This sets the btn's text to remove.
   li.appendChild(button);//This adds a remove btn to each list item.
   
+  return li;
+}
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault(); //This prevents the page from reloading when the submit button is clicked
+  let text = input.value;//This is the value of the input box in the form.
+  input.value = '';//This resets the input field to a blank string to let the person know the submit btn has been clicked.
+  let li = createLI(text);//This calls the createLI function to actually make the li element.  The li element is returned here.  This makes the code easier to read.
   ul.appendChild(li);//This adds the li to the blank ul.
 });
 

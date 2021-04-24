@@ -4,7 +4,9 @@ let ul = document.getElementById('invitedList');
 
 function createLI(text) {
   let li = document.createElement('li');//Creates a list item
-  li.textContent = text;//Sets the li text to the value of the input box.
+  let span = document.createElement('span');//This creates the span for the text.  The span is needed to manipulate the text easier for editing purposes.  Without the span elements it's more difficult to edit the text.
+  span.textContent = text;//Sets the span text to the value of the input box.
+  li.appendChild(span);//Adds the span element to the li
   let label = document.createElement('label');//Creates a label for the confirmed checkbox.
   label.textContent = 'Confirmed';//Sets the text in the checkbox label to confirmed.
   let checkbox = document.createElement('input');//This creates the confirmed checkbox.
@@ -12,9 +14,13 @@ function createLI(text) {
   label.appendChild(checkbox);//This adds the checkbox to the label element.
   li.appendChild(label);//This appends the label (and checkbox) to the li
   
-  let button = document.createElement('button');//This creates the remove btn.
-  button.textContent = 'remove';//This sets the btn's text to remove.
-  li.appendChild(button);//This adds a remove btn to each list item.
+  let editButton = document.createElement('button');//This creates the edit btn.
+  editButton.textContent = 'edit';//This sets the btn's text to edit.
+  li.appendChild(editButton);//This adds an edit btn to each list item.
+  
+  let removeButton = document.createElement('button');//This creates the remove btn.
+  removeButton.textContent = 'remove';//This sets the btn's text to remove.
+  li.appendChild(removeButton);//This adds a remove btn to each list item.
   
   return li;
 }
@@ -43,9 +49,28 @@ ul.addEventListener('change', (e) => {
 ul.addEventListener('click', (e) => {
   //This if statement makes sure that the event is only triggered when you click a button.
   if(e.target.tagName === 'BUTTON') {
-    let li = e.target.parentNode;//This targets the parent node of the remove btn that is clicked, which is the li that you want to delete.
+    let button = e.target;
+    let li = button.parentNode;//This targets the parent node of the remove btn that is clicked, which is the li that you want to delete.
     let ul = li.parentNode;//This grabs the ul that the list item that wants to be deleted is in.
-    ul.removeChild(li);
+    
+    if(button.textContent === 'remove') {//This targets the remove button only.
+      ul.removeChild(li);
+    } else if(button.textContent === 'edit') {
+      let span = li.firstElementChild;//Grabs the existing span element
+      let input = document.createElement('input');//Creates a new input field
+      input.type = 'text';//Sets the input type to text
+      input.value = span.textContent;//This keeps the value of the existing span element and puts it into the new input element as if they're editing it instead of starting with a blank input field.
+      li.insertBefore(input, span);//Inserts the input field before the span
+      li.removeChild(span);//Removes the span element leaving only the new input field
+      button.textContent = 'save';//Changes the button text to save.
+    } else if (button.textContent === 'save') {
+      let input = li.firstElementChild;//Grabs the existing input element
+      let span = document.createElement('span');//Creates a new span element
+      span.textContent = input.value;//Places the text value of the input into the span
+      li.insertBefore(span, input);//Inserts the span element before the input element
+      li.removeChild(input);//Removes the input child.
+      button.textContent = 'edit';//Changes the button text to edit
+    }
   }
 });
                     

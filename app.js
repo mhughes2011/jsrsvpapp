@@ -1,6 +1,38 @@
 let form = document.getElementById('registrar');
 let input = form.querySelector('input');
+
+let mainDiv = document.querySelector('.main');
 let ul = document.getElementById('invitedList');
+
+let div = document.createElement('div');
+let filterLabel = document.createElement('label');
+let filterCheckbox = document.createElement('input');
+
+filterLabel.textContent = "Hide those who haven't responded";
+filterCheckbox.type = 'checkbox';
+div.appendChild(filterLabel);
+div.appendChild(filterCheckbox);
+mainDiv.insertBefore(div, ul);
+
+filterCheckbox.addEventListener('change', (e) => {
+  let isChecked = e.target.checked;//Grabs the checked property of a checkbox input and stores it as checked.  If it isn't checked the checked property is empty.
+  let lis = ul.children;//This grabs all of the children of ul and stores them in an array
+  if(isChecked) {
+    for (let i=0; i<lis.length; i++) {//These for loops are looping through each child in the array
+      let li = lis[i];
+      if(li.className === 'responded') {
+        li.style.display = '';//This means that the li element has the class name of repsonded and allow it to pick up it's previous style.
+      } else {
+        li.style.display = 'none';//This means the li element doens't have the class name of repsonded meaning the confirmed checkbox isn't checked.  It removes the child by making it disappear.
+      }
+    }
+  } else {//This is the case when the filter checkbox isn't checked and you want to display all of the attendees whether they've confirmed or not
+    for (let i=0; i<lis.length; i++) {
+      let li = lis[i];
+      li.style.display = '';
+    }
+  }
+});
 
 function createLI(text) {
   let li = document.createElement('li');//Creates a list item

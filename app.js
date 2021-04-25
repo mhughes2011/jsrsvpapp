@@ -88,25 +88,41 @@ document.addEventListener('DOMContentLoaded', () => {
       let button = e.target;
       let li = button.parentNode;//This targets the parent node of the remove btn that is clicked, which is the li that you want to delete.
       let ul = li.parentNode;//This grabs the ul that the list item that wants to be deleted is in.
+      let action = button.textContent;//This grabs which button it is and stores it in action.
       
-      if(button.textContent === 'remove') {//This targets the remove button only.
-        ul.removeChild(li);
-      } else if(button.textContent === 'edit') {
-        let span = li.firstElementChild;//Grabs the existing span element
-        let input = document.createElement('input');//Creates a new input field
-        input.type = 'text';//Sets the input type to text
-        input.value = span.textContent;//This keeps the value of the existing span element and puts it into the new input element as if they're editing it instead of starting with a blank input field.
-        li.insertBefore(input, span);//Inserts the input field before the span
-        li.removeChild(span);//Removes the span element leaving only the new input field
-        button.textContent = 'save';//Changes the button text to save.
-      } else if (button.textContent === 'save') {
-        let input = li.firstElementChild;//Grabs the existing input element
-        let span = document.createElement('span');//Creates a new span element
-        span.textContent = input.value;//Places the text value of the input into the span
-        li.insertBefore(span, input);//Inserts the span element before the input element
-        li.removeChild(input);//Removes the input child.
-        button.textContent = 'edit';//Changes the button text to edit
-      }
+      //This creates on object of functions called nameActions.  The functions are stored as properties of the object and then called like object functions in the if statement.  Turns the function declarations into arrow functions.
+      let nameActions = {
+        remove: () => {
+          ul.removeChild(li);
+        },
+        edit: () => {
+          let span = li.firstElementChild;//Grabs the existing span element
+          let input = document.createElement('input');//Creates a new input field
+          input.type = 'text';//Sets the input type to text
+          input.value = span.textContent;//This keeps the value of the existing span element and puts it into the new input element as if they're editing it instead of starting with a blank input field.
+          li.insertBefore(input, span);//Inserts the input field before the span
+          li.removeChild(span);//Removes the span element leaving only the new input field
+          button.textContent = 'save';//Changes the button text to save.
+        },
+        save: () => {
+          let input = li.firstElementChild;//Grabs the existing input element
+          let span = document.createElement('span');//Creates a new span element
+          span.textContent = input.value;//Places the text value of the input into the span
+          li.insertBefore(span, input);//Inserts the span element before the input element
+          li.removeChild(input);//Removes the input child.
+          button.textContent = 'edit';//Changes the button text to edit
+        }
+      };
+    
+      nameActions[action]();//Bracket notation is needed because it's using the variable action to call the object functions.  This is normally done with dot notation but when you're using a variable you must use bracket notation.
+      //These lines are replaced by line 117 because it's calling the specific function from the object of functions via the button string itself called actions.
+//      if(action === 'remove') {//This targets the remove button only.
+//        nameActions.remove();
+//      } else if(action === 'edit') {
+//        nameActions.edit();
+//      } else if (action === 'save') {
+//        nameActions.save(); 
+//      }
     }
   });
 

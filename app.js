@@ -36,24 +36,27 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   
   function createLI(text) {
+    //This function is used to create the new elements, use the propName we're trying to change and it's associated value.
+    function createElement(elName, propName, value) {
+      let element = document.createElement(elName);
+      element[propName] = value;
+      return element;
+    }
+    
+    //This function is used to append the new elements to each li.  The call to createElement is also in here.
+    function appendToLi(elName, propName, value) {
+      let element = createElement(elName, propName, value);
+      li.appendChild(element);
+      return element;
+    }
+    
     let li = document.createElement('li');//Creates a list item
-    let span = document.createElement('span');//This creates the span for the text.  The span is needed to manipulate the text easier for editing purposes.  Without the span elements it's more difficult to edit the text.
-    span.textContent = text;//Sets the span text to the value of the input box.
-    li.appendChild(span);//Adds the span element to the li
-    let label = document.createElement('label');//Creates a label for the confirmed checkbox.
-    label.textContent = 'Confirmed';//Sets the text in the checkbox label to confirmed.
-    let checkbox = document.createElement('input');//This creates the confirmed checkbox.
-    checkbox.type = 'checkbox';//This sets the input type to checkbox.
-    label.appendChild(checkbox);//This adds the checkbox to the label element.
-    li.appendChild(label);//This appends the label (and checkbox) to the li
     
-    let editButton = document.createElement('button');//This creates the edit btn.
-    editButton.textContent = 'edit';//This sets the btn's text to edit.
-    li.appendChild(editButton);//This adds an edit btn to each list item.
-    
-    let removeButton = document.createElement('button');//This creates the remove btn.
-    removeButton.textContent = 'remove';//This sets the btn's text to remove.
-    li.appendChild(removeButton);//This adds a remove btn to each list item.
+    appendToLi('span', 'textContent', text);//Calls the appendToLi function to create the element and append it to each li element.  This is for the span element.
+    appendToLi('label', 'textContent', 'Confirmed')//This creates the label
+      .appendChild(createElement('input', 'type', 'checkbox'));//This creates the checkbox and appends it to the label.
+    appendToLi('button', 'textContent', 'edit');//This is for the edit button
+    appendToLi('button', 'textContent', 'remove');//This is for the remove button
     
     return li;
   }
